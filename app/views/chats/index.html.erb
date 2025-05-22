@@ -1,4 +1,58 @@
-<div>
-  <h1 class="font-bold text-4xl">Chats#index</h1>
-  <p>Find me in app/views/chats/index.html.erb</p>
+<%
+messages = [
+  {
+    role: "user",
+    text: "こんにちは",
+    parts: [
+      { type: "text", content: "こんにちは" }
+    ]
+  },
+  {
+    role: "assistant",
+    text: "こんにちは！何かお手伝いできることはありますか？",
+    parts: [
+      { type: "text", content: "こんにちは！何かお手伝いできることはありますか？" }
+    ]
+  }
+]
+%>
+
+<div class="relative flex min-h-svh flex-1 flex-col">
+  <div class="flex flex-col min-w-0 h-dvh bg-background">
+    <div class="overflow-y-scroll min-w-0 flex-1">
+      <div class="flex flex-col pt-4 gap-6">
+        <% messages.each do |message| %>
+          <div class="w-full mx-auto max-w-3xl px-4 group/message" data-role="<%= message[:role] %>">
+            <div class="flex gap-4 w-full group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:w-fit">
+              <div class="flex flex-col gap-4 w-full">
+                <% message[:parts].each do |part| %>
+                  <% if part[:type] == "text" %>
+                    <div class="flex flex-row gap-2 items-start">
+                      <div class="flex flex-col gap-4 group-data-[role=user]/message:bg-zinc-200 group-data-[role=user]/message:dark:bg-zinc-700 group-data-[role=user]/message:dark:text-white group-data-[role=user]/message:text-black group-data-[role=user]/message:px-3 group-data-[role=user]/message:py-2 group-data-[role=user]/message:rounded-xl">
+                        <%= message[:text] %>
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="flex flex-col pt-4 gap-6"></div>
+      <div class="shrink-0 min-w-[24px] min-h-[24px]"></div>
+    </div>
+    <%= form_with class: "flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl" do |form| %>
+      <input type="hidden" name="authenticity_token" value="[YOUR_CSRF_TOKEN_HERE]">
+      <div class="relative w-full flex flex-col gap-4">
+        <%= form.text_area :input, placeholder: "質問してみましょう", class: "flex w-full border border-input bg-background px-3 py-2 md:text-sm resize-none rounded-2xl bg-muted pb-10 border-zinc-300 dark:border-zinc-700", rows: 2, autofocus: true, id: "input" %>
+
+        <div class="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
+            <button type="submit" class="rounded-full p-1.5 h-fit border dark:border-zinc-600">
+            <%= image_tag "arrowup.svg" %>
+            </button>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
