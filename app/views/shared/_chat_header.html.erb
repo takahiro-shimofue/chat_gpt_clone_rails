@@ -1,4 +1,19 @@
 <header class="flex sticky top-0 bg-background py-1.5 justify-between items-center px-2 md:px-2 gap-2 h-16">
   <div class="flex"></div>
-  <%= image_tag "avatar.svg" %>
+    <div class="relative inline-block text-left">
+      <div>
+        <button
+          type="button"
+          class="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm"
+          id="menu-button"
+        >
+          <%= image_tag "avatar.svg" %>
+        </button>
+      </div>
+      <div class="absolute right-0 z-100 mt-2 w-56 origin-top-right rounded-md shadow-lg dark:bg-zinc-800 ring-black/5">
+        <div class="py-1" role="none">
+          <%= link_to "ログアウト", session_path, data: { turbo_method: :delete }, class: "block px-4 py-2 text-sm" %>
+        </div>
+      </div>
+    </div>
 </header>
