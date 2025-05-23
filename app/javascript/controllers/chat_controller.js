@@ -1,5 +1,6 @@
 import {Controller} from "@hotwired/stimulus"
-
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 // Connects to data-controller="chat"
 export default class extends Controller {
   static targets = ["prompt", "conversation"]
@@ -35,13 +36,13 @@ export default class extends Controller {
         'Accept': 'text/event-stream',
         'X-CSRF-Token': csrfToken
       },
-      body: JSON.stringify({
-        prompt
-      })
+      body: JSON.stringify({ prompt })
     });
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
+
+    let rawContent = "";
 
     while (true) {
       const {
@@ -57,8 +58,9 @@ export default class extends Controller {
         if (line.startsWith('data: ')) {
           const raw = line.slice(6);
           try {
-            const parsedData = JSON.parse(raw);
-            this.assistantMessage.innerHTML += parsedData.message;
+            const { message } = JSON.parse(raw);
+            rawContent += message;
+            this.assistantMessage.innerHTML = DOMPurify.sanitize(marked.parse(rawContent));
           } catch (e) {
             console.error('Error parsing JSON:', e);
             console.log('Raw data:', raw);
