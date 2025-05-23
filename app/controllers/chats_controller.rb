@@ -13,7 +13,17 @@ class ChatsController < ApplicationController
     )
 
     begin
-      stream_chat_response(client, sse)
+      content = stream_chat_response(client, sse)
+      chat = Chat.create!(
+        user: Current.session.user,
+        uuid: SecureRandom.uuid,
+        messages: [
+          Message.new(role: "user", content: params[:prompt]),
+          Message.new(role: "assistant", content: content)
+        ],
+      )
+    rescue ActiveRecord::RecordInvalid => e
+      Rails.logger.error("Failed to save chat: #{e.message}")
     ensure
       sse.close
     end
@@ -27,6 +37,7 @@ class ChatsController < ApplicationController
   end
 
   def stream_chat_response(client, sse)
+    full_content = ""
     client.chat(
       parameters: {
         model: "gemini-2.0-flash",
@@ -35,9 +46,13 @@ class ChatsController < ApplicationController
           content = chunk.dig("choices", 0, "delta", "content")
           puts "content: #{content}"
           puts "chunk: #{chunk}"
-          sse.write({ message: content }) if content
+          if content
+            sse.write({ message: content })
+            full_content += content
+          end
         end
       }
     )
+    full_content
   end
 end
