@@ -33,6 +33,17 @@ export default class extends Controller {
     const prompt = this.promptTarget.value;
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
+    let body = { prompt }
+    // root urlのときは、/chats/uuidにリダイレクトする
+    if (window.location.pathname === "/") {
+      const uuid = crypto.randomUUID();
+      window.history.replaceState({}, '', `/chats/${uuid}`);
+      body = { prompt, uuid }
+    } else {
+      const uuid = window.location.pathname.split('/').pop();
+      body = { prompt, uuid }
+    }
+
     const response = await fetch('/chats', {
       method: 'POST',
       headers: {
@@ -40,7 +51,7 @@ export default class extends Controller {
         'Accept': 'text/event-stream',
         'X-CSRF-Token': csrfToken
       },
-      body: JSON.stringify({ prompt })
+      body: JSON.stringify(body),
     });
 
     const reader = response.body.getReader();
