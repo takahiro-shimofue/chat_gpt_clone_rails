@@ -16,7 +16,13 @@
               <div class="flex flex-col gap-4 w-full">
                 <div class="flex flex-row gap-2 items-start">
                   <div class="flex flex-col gap-4 group-data-[role=user]/message:bg-zinc-200 group-data-[role=user]/message:dark:bg-zinc-700 group-data-[role=user]/message:dark:text-white group-data-[role=user]/message:text-black group-data-[role=user]/message:px-3 group-data-[role=user]/message:py-2 group-data-[role=user]/message:rounded-xl">
-                    <%= message.content %>
+                    <% if message.role == "assistant" %>
+                      <div data-controller="markdown">
+                        <%= message.content %>
+                      </div>
+                    <% else %>
+                      <%= message.content %>
+                    <% end %>
                   </div>
                 </div>
               </div>
