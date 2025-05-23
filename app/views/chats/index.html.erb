@@ -1,9 +1,15 @@
-<% messages = [{ role: "user", text: "こんにちは", parts: [{ type: "text", content: "こんにちは" }] }, { role: "assistant", text: "こんにちは！何かお手伝いできることはありますか？", parts: [{ type: "text", content: "こんにちは！何かお手伝いできることはありますか？" }] }] %>
 <div class="relative flex min-h-svh flex-1 flex-col" data-controller="chat">
   <div class="flex flex-col min-w-0 h-dvh bg-background">
     <div class="overflow-y-scroll min-w-0 flex-1">
       <div class="flex flex-col pt-4 gap-6">
-        <% messages.each do |message| %>
+        <% if (@messages || []).empty? %>
+          <div data-chat-target="greeting" class="max-w-3xl mx-auto flex flex-1 items-center min-h-[60vh]">
+            <div class="text-xl md:text-2xl font-semibold text-left mx-0">
+              お手伝いできることはありますか？
+            </div>
+          </div>
+        <% end %>
+        <% (@messages || []).each do |message| %>
           <div class="w-full mx-auto max-w-3xl px-4 group/message" data-role="<%= message[:role] %>">
             <div class="flex gap-4 w-full group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:w-fit">
               <div class="flex flex-col gap-4 w-full">

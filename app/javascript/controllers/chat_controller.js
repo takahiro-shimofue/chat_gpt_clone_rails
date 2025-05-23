@@ -3,10 +3,14 @@ import { marked } from "marked";
 import DOMPurify from "dompurify";
 // Connects to data-controller="chat"
 export default class extends Controller {
-  static targets = ["prompt", "conversation", "scroll"]
+  static targets = ["prompt", "conversation", "scroll", "greeting"]
 
   generateResponse(event) {
     event.preventDefault()
+
+    if (this.hasGreetingTarget) {
+      this.greetingTarget.remove()
+    }
 
     const template = document.getElementById('chat-message')
     const clone = template.content.cloneNode(true)
