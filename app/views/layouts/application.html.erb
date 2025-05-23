@@ -23,6 +23,13 @@
   </head>
 
   <body>
+    <% if flash[:notice] %>
+      <div data-controller="flash" data-flash-type="notice" data-flash-message="<%= flash[:notice] %>"></div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div data-controller="flash" data-flash-type="alert" data-flash-message="<%= flash[:alert] %>"></div>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
