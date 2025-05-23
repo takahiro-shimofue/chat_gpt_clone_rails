@@ -14,6 +14,7 @@ services:
       - 3000:3000
     environment:
       - BINDING=0.0.0.0
+      - EDITOR=vim
 
 volumes:
   bundle:
