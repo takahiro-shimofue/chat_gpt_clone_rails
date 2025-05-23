@@ -1,4 +1,19 @@
-<div>
-  <h1 class="font-bold text-4xl">Registrations#new</h1>
-  <p>Find me in app/views/registrations/new.html.erb</p>
+<div class="flex h-dvh w-screen items-start pt-12 md:pt-0 md:items-center justify-center bg-background">
+  <div class="w-full max-w-md overflow-hidden rounded-2xl gap-6 flex flex-col">
+    <div class="flex flex-col items-center justify-center gap-2 px-4 text-center sm:px-16">
+      <h3 class="text-xl font-semibold dark:text-zinc-50">アカウントの作成</h3>
+    </div>
+    <%= form_with url: registration_url, class: "flex flex-col gap-4 px-4 sm:px-16" do |form| %>
+      <div class="flex flex-col gap-2">
+        <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "flex h-10 w-full rounded-md border border-zinc-200 px-3 py-2 text-md md:text-sm" %>
+      </div>
+      <div class="flex flex-col gap-2">
+         <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "flex h-10 w-full rounded-md border border-zinc-200 px-3 py-2 text-md md:text-sm" %>
+      </div>
+      <%= form.submit "アカウント登録", class: "inline-flex items-center justify-center gap-2 rounded-md text-sm cursor-pointer border border-zinc-300 font-medium hover:bg-zinc-200 dark:hover:bg-zinc-800 h-10 px-4 py-2" %>
+    <% end %>
+    <p class="text-center text-sm text-zinc-600 dark:text-zinc-400">すでにアカウントをお持ちですか？
+      <%= link_to "サインイン", new_session_url, class: "font-semibold text-zinc-800 hover:underline dark:text-zinc-200" %>
+    </p>
+  </div>
 </div>
