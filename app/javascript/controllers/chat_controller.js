@@ -3,7 +3,7 @@ import { marked } from "marked";
 import DOMPurify from "dompurify";
 // Connects to data-controller="chat"
 export default class extends Controller {
-  static targets = ["prompt", "conversation"]
+  static targets = ["prompt", "conversation", "scroll"]
 
   generateResponse(event) {
     event.preventDefault()
@@ -61,6 +61,7 @@ export default class extends Controller {
             const { message } = JSON.parse(raw);
             rawContent += message;
             this.assistantMessage.innerHTML = DOMPurify.sanitize(marked.parse(rawContent));
+            this.scrollTarget.scrollIntoView({ behavior: "smooth", block: "end" });
           } catch (e) {
             console.error('Error parsing JSON:', e);
             console.log('Raw data:', raw);
