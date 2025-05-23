@@ -3,26 +3,22 @@
     <%= render partial: "shared/chat_header" %>
     <div class="overflow-y-scroll min-w-0 flex-1">
       <div class="flex flex-col pt-4 gap-6">
-        <% if (@messages || []).empty? %>
+        <% if (@chat&.messages || []).empty? %>
           <div data-chat-target="greeting" class="max-w-3xl mx-auto flex flex-1 items-center min-h-[60vh]">
             <div class="text-xl md:text-2xl font-semibold text-left mx-0">
               お手伝いできることはありますか？
             </div>
           </div>
         <% end %>
-        <% (@messages || []).each do |message| %>
+        <% (@chat&.messages || []).each do |message| %>
           <div class="w-full mx-auto max-w-3xl px-4 group/message" data-role="<%= message[:role] %>">
             <div class="flex gap-4 w-full group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:w-fit">
               <div class="flex flex-col gap-4 w-full">
-                <% message[:parts].each do |part| %>
-                  <% if part[:type] == "text" %>
-                    <div class="flex flex-row gap-2 items-start">
-                      <div class=" flex flex-col gap-4 group-data-[role=user]/message:bg-zinc-200 group-data-[role=user]/message:dark:bg-zinc-700 group-data-[role=user]/message:dark:text-white group-data-[role=user]/message:text-black group-data-[role=user]/message:px-3 group-data-[role=user]/message:py-2 group-data-[role=user]/message:rounded-xl ">
-                        <%= message[:text] %>
-                      </div>
-                    </div>
-                  <% end %>
-                <% end %>
+                <div class="flex flex-row gap-2 items-start">
+                  <div class="flex flex-col gap-4 group-data-[role=user]/message:bg-zinc-200 group-data-[role=user]/message:dark:bg-zinc-700 group-data-[role=user]/message:dark:text-white group-data-[role=user]/message:text-black group-data-[role=user]/message:px-3 group-data-[role=user]/message:py-2 group-data-[role=user]/message:rounded-xl">
+                    <%= message.content %>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
