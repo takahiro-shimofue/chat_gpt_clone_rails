@@ -1,50 +1,96 @@
-<div class="relative flex min-h-svh flex-1 flex-col" data-controller="chat">
-  <div class="flex flex-col min-w-0 h-dvh bg-background">
-    <%= render partial: "shared/chat_header" %>
-    <div class="overflow-y-scroll min-w-0 flex-1">
-      <div class="flex flex-col pt-4 gap-6">
-        <% if (@chat&.messages || []).empty? %>
-          <div data-chat-target="greeting" class="max-w-3xl mx-auto flex flex-1 items-center min-h-[60vh]">
-            <div class="text-xl md:text-2xl font-semibold text-left mx-0">
-              お手伝いできることはありますか？
-            </div>
-          </div>
-        <% end %>
-        <% (@chat&.messages || []).each do |message| %>
-          <div class="w-full mx-auto max-w-3xl px-4 group/message" data-role="<%= message[:role] %>">
-            <div class="flex gap-4 w-full group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:w-fit">
-              <div class="flex flex-col gap-4 w-full">
-                <div class="flex flex-row gap-2 items-start">
-                  <div class="flex flex-col gap-4 group-data-[role=user]/message:bg-zinc-200 group-data-[role=user]/message:dark:bg-zinc-700 group-data-[role=user]/message:dark:text-white group-data-[role=user]/message:text-black group-data-[role=user]/message:px-3 group-data-[role=user]/message:py-2 group-data-[role=user]/message:rounded-xl">
-                    <% if message.role == "assistant" %>
-                      <div data-controller="markdown">
-                        <%= message.content %>
+<div class="group/sidebar-wrapper flex min-h-svh w-full">
+
+  <div class="z-20 dark:bg-black bg-white shrink-0 w-64 h-screen overflow-y-auto">
+    <div class="h-full w-64">
+      <div class="flex h-full min-h-0 flex-col">
+        <div class="relative h-full w-full flex-1 items-start border-r border-zinc-700">
+          <h2 class="sr-only">チャット履歴</h2>
+          <nav class="flex h-full w-full flex-col pl-3">
+            <div class="flex-col flex-1 transition-opacity duration-500 relative pr-3 overflow-y-auto">
+              <div id="sidebar" class="group/sidebar">
+                <div class="flex flex-col gap-2 text-sm">
+                  <div>
+                    <div class="relative first:mt-0 last:mb-5">
+                      <div class="relative flex w-full min-w-0 flex-col p-2">
+                        <div class="w-full text-sm">
+                          <div class="flex w-full min-w-0 flex-col gap-1">
+                            <div class="flex flex-col gap-2">
+                              <% Current.session.user.chats.each do |chat| %>
+                                <div class="relative">
+                                  <div class="group rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 h-9 text-sm relative">
+                                    <div class="flex justify-between items-center px-1">
+                                      <%= link_to chat_path(uuid: chat.uuid), class: "flex items-center gap-2 p-2" do %>
+                                        <div class="relative grow overflow-hidden whitespace-nowrap">
+                                          <p class="truncate w-[150px]"><%= chat.uuid %></p>
+                                        </div>
+                                      <% end %>
+                                    </div>
+                                  </div>
+                                </div>
+                              <% end %>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    <% else %>
-                      <%= message.content %>
-                    <% end %>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        <% end %>
-      </div>
-      <div class="flex flex-col pt-4 gap-6" data-chat-target="conversation"></div>
-      <div class="shrink-0 min-w-[24px] min-h-[24px]" data-chat-target="scroll"></div>
-    </div>
-    <%= form_with data: { action: "chat#generateResponse" }, class: "flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl" do |form| %>
-      <input type="hidden" name="authenticity_token" value="[YOUR_CSRF_TOKEN_HERE]">
-      <div class="relative w-full flex flex-col gap-4">
-        <%= form.text_area :input, data: { chat_target: "prompt" }, placeholder: "質問してみましょう", class: "flex w-full border border-input bg-background px-3 py-2 md:text-sm resize-none rounded-2xl bg-muted pb-10 border-zinc-300 dark:border-zinc-700", rows: 2, autofocus: true, id: "input", onkeydown: "if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); this.form.requestSubmit(); }" %>
-
-        <div class="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
-          <button type="submit" class="rounded-full p-1.5 h-fit border dark:border-zinc-600">
-            <%= image_tag "arrowup.svg" %>
-          </button>
+          </nav>
         </div>
       </div>
-    <% end %>
+    </div>
+  </div>
+
+  <div class="relative flex min-h-svh flex-1 flex-col" data-controller="chat">
+    <div class="flex flex-col min-w-0 h-dvh bg-background">
+      <%= render partial: "shared/chat_header" %>
+      <div class="overflow-y-scroll min-w-0 flex-1">
+        <div class="flex flex-col pt-4 gap-6">
+          <% if (@chat&.messages || []).empty? %>
+            <div data-chat-target="greeting" class="max-w-3xl mx-auto flex flex-1 items-center min-h-[60vh]">
+              <div class="text-xl md:text-2xl font-semibold text-left mx-0">
+                お手伝いできることはありますか？
+              </div>
+            </div>
+          <% end %>
+          <% (@chat&.messages || []).each do |message| %>
+            <div class="w-full mx-auto max-w-3xl px-4 group/message" data-role="<%= message[:role] %>">
+              <div class="flex gap-4 w-full group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:w-fit">
+                <div class="flex flex-col gap-4 w-full">
+                  <div class="flex flex-row gap-2 items-start">
+                    <div class="flex flex-col gap-4 group-data-[role=user]/message:bg-zinc-200 group-data-[role=user]/message:dark:bg-zinc-700 group-data-[role=user]/message:dark:text-white group-data-[role=user]/message:text-black group-data-[role=user]/message:px-3 group-data-[role=user]/message:py-2 group-data-[role=user]/message:rounded-xl">
+                      <% if message.role == "assistant" %>
+                        <div data-controller="markdown">
+                          <%= message.content %>
+                        </div>
+                      <% else %>
+                        <%= message.content %>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <div class="flex flex-col pt-4 gap-6" data-chat-target="conversation"></div>
+        <div class="shrink-0 min-w-[24px] min-h-[24px]" data-chat-target="scroll"></div>
+      </div>
+      <%= form_with data: { action: "chat#generateResponse" }, class: "flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl" do |form| %>
+        <input type="hidden" name="authenticity_token" value="[YOUR_CSRF_TOKEN_HERE]">
+        <div class="relative w-full flex flex-col gap-4">
+          <%= form.text_area :input, data: { chat_target: "prompt" }, placeholder: "質問してみましょう", class: "flex w-full border border-input bg-background px-3 py-2 md:text-sm resize-none rounded-2xl bg-muted pb-10 border-zinc-300 dark:border-zinc-700", rows: 2, autofocus: true, id: "input", onkeydown: "if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); this.form.requestSubmit(); }" %>
+
+          <div class="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
+            <button type="submit" class="rounded-full p-1.5 h-fit border dark:border-zinc-600">
+              <%= image_tag "arrowup.svg" %>
+            </button>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
 
