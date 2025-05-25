@@ -7,7 +7,10 @@ class ChatsController < ApplicationController
   def show
     @chat = Current.session.user.chats.find_by!(uuid: params[:uuid])
 
-    render template: "chats/index"
+    respond_to do |format|
+      format.html { render template: "chats/index" }
+      format.turbo_stream
+    end
   end
 
   def create
