@@ -35,12 +35,15 @@ export default class extends Controller {
 
     let body = { prompt }
     // root urlのときは、/chats/uuidにリダイレクトする
+    let uuid;
+    let newRecord = false;
     if (window.location.pathname === "/") {
-      const uuid = crypto.randomUUID();
+      uuid = crypto.randomUUID();
       window.history.replaceState({}, '', `/chats/${uuid}`);
       body = { prompt, uuid }
+      newRecord = true;
     } else {
-      const uuid = window.location.pathname.split('/').pop();
+      uuid = window.location.pathname.split('/').pop();
       body = { prompt, uuid }
     }
 
@@ -64,7 +67,21 @@ export default class extends Controller {
         done,
         value
       } = await reader.read();
-      if (done) break;
+      if (done) {
+        console.log("Stream finished");
+        if (newRecord) {
+          // turboを呼び出してサイドバーの更新を行う
+          fetch(`/chats/${uuid}`, {
+            headers: {
+              'X-CSRF-Token': csrfToken,
+              'Accept': 'text/vnd.turbo-stream.html',
+            },
+          }).then(response => response.text())
+          .then(html => Turbo.renderStreamMessage(html))
+        }
+
+        break;
+      }
       if (!value) continue;
 
       const lines = decoder.decode(value).trim().split('\n');

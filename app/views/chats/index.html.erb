@@ -15,18 +15,9 @@
                         <div class="w-full text-sm">
                           <div class="flex w-full min-w-0 flex-col gap-1">
                             <div class="flex flex-col gap-2">
-                              <% Current.session.user.chats.each do |chat| %>
-                                <div class="relative">
-                                  <div class="group rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 h-9 text-sm relative">
-                                    <div class="flex justify-between items-center px-1">
-                                      <%= link_to chat_path(uuid: chat.uuid), class: "flex items-center gap-2 p-2" do %>
-                                        <div class="relative grow overflow-hidden whitespace-nowrap">
-                                          <p class="truncate w-[150px]"><%= chat.uuid %></p>
-                                        </div>
-                                      <% end %>
-                                    </div>
-                                  </div>
-                                </div>
+                              <%= turbo_frame_tag "chat_links" %>
+                              <% Current.session.user.chats.order(created_at: :desc).each do |chat| %>
+                                <%= render partial: "chats/link", locals: { chat: chat } %>
                               <% end %>
                             </div>
                           </div>
