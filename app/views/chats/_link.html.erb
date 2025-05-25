@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center px-1">
       <%= link_to chat_path(uuid: chat.uuid), class: "flex items-center gap-2 p-2" do %>
         <div class="relative grow overflow-hidden whitespace-nowrap">
-          <p class="truncate w-[150px]"><%= chat.uuid %></p>
+          <p class="truncate w-[150px]"><%= chat.title || chat.uuid %></p>
         </div>
       <% end %>
     </div>

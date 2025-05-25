@@ -25,6 +25,7 @@ class ChatsController < ApplicationController
       content = stream_chat_response(client, sse)
       chat = Chat.find_or_initialize_by(uuid: params[:uuid]) do |chat|
         chat.user = Current.session.user
+        chat.title = generate_title(client)
       end
       Rails.logger.debug("chat: #{chat.inspect}")
       if chat.user != Current.session.user
@@ -63,5 +64,24 @@ class ChatsController < ApplicationController
       }
     )
     full_content
+  end
+
+  def generate_title(client)
+    system_prompt = <<~SYSTEM_PROMPT
+      - ユーザーが会話を始める最初のメッセージに基づいて、短いタイトルを生成します
+      - タイトルは80文字以内に収めてください
+      - タイトルはユーザーのメッセージの要約であるべきです
+      - 引用符やコロンは使用しないでください
+      - タイトルは日本語で生成してください
+    SYSTEM_PROMPT
+    client.chat(
+      parameters: {
+        model: "gemini-2.0-flash",
+        messages: [
+          { role: "system", content: system_prompt },
+          { role: "user", content: "Generate a title for the following chat: #{params[:prompt]}" }
+        ]
+      }
+    ).dig("choices", 0, "message", "content").chomp
   end
 end
