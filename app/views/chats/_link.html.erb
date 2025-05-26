@@ -1,4 +1,4 @@
-<div class="relative">
+<div class="relative" data-controller="dropdown">
   <div class="group rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 h-9 text-sm relative">
     <div class="flex justify-between items-center px-1">
       <%= link_to chat_path(uuid: chat.uuid), class: "flex items-center gap-2 p-2" do %>
@@ -6,6 +6,21 @@
           <p class="truncate w-[150px]"><%= chat.title || chat.uuid %></p>
         </div>
       <% end %>
+      <button
+        data-action="click->dropdown#toggle click@window->dropdown#hide"
+      >
+        <%= image_tag "ellipsis.svg" %>
+      </button>
+    </div>
+    <div data-dropdown-target="menu" class="hidden absolute z-30 mt-2 w-32 right-0 rounded-md bg-white dark:bg-zinc-800 shadow-lg ring-1 ring-black/5 focus:outline-hidden">
+      <div class="py-1" role="none" data-action="click->dropdown#toggle">
+        <%= link_to delete_modal_chat_path(uuid: chat.uuid), data: { turbo_frame: :modal, turbo_stream: true }, class: "gap-4 group/item flex justify-between items-center p-2" do %>
+          <%= image_tag "trash.svg" %>
+          <div class="flex flex-col gap-1 items-start text-red-400">
+            <div>削除</div>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
