@@ -7,6 +7,9 @@
     >
       <%= image_tag "sidebar.svg" %>
     </button>
+    <%= link_to :root, class: "hover:bg-zinc-200 inline-flex items-center justify-center dark:hover:bg-zinc-700 h-10 rounded-lg px-2 focus:outline-none" do %>
+      <%= image_tag "edit.svg" %>
+    <% end %>
   </div>
   <div class="relative inline-block text-left" data-controller="dropdown">
     <div>
