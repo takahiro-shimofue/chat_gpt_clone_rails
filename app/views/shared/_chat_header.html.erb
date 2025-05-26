@@ -1,5 +1,13 @@
 <header class="flex sticky top-0 bg-background py-1.5 justify-between items-center px-2 md:px-2 gap-2 h-16">
-  <div class="flex"></div>
+  <div class="flex">
+    <button
+      class="hover:bg-zinc-200 dark:hover:bg-zinc-700 h-10 rounded-lg px-2"
+      data-action="click->sidebar#toggle"
+      data-sidebar-target="openButton"
+    >
+      <%= image_tag "sidebar.svg" %>
+    </button>
+  </div>
   <div class="relative inline-block text-left" data-controller="dropdown">
     <div>
       <button
