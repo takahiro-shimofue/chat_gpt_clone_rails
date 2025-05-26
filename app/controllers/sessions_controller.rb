@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  allow_unauthenticated_access only: %i[ new create ]
+  allow_unauthenticated_access only: %i[ new create google ]
   rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "Try again later." }
 
   def new
@@ -12,6 +12,13 @@ class SessionsController < ApplicationController
     else
       redirect_to new_session_path, alert: "Try another email address or password."
     end
+  end
+
+  def google
+    user = User.authenticate_by_omniauth(request.env["omniauth.auth"])
+    Rails.logger.info "User authenticated via Google: #{user.inspect}"
+    start_new_session_for user
+    redirect_to after_authentication_url, notice: "ログインに成功しました。"
   end
 
   def destroy

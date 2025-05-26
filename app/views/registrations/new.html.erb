@@ -15,6 +15,7 @@
     <p class="text-center text-sm text-zinc-600 dark:text-zinc-400">すでにアカウントをお持ちですか？
       <%= link_to "サインイン", new_session_url, class: "font-semibold text-zinc-800 hover:underline dark:text-zinc-200" %>
     </p>
+    <%= render partial: "shared/google_login" %>
     <%= render partial: "shared/auth_footer" %>
   </div>
 </div>

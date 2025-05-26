@@ -1,0 +1,15 @@
+<div class="flex items-center justify-center">
+  <div class="h-px px-4 sm:px-16 bg-zinc-200 dark:bg-zinc-600"></div>
+  <span class="mx-4 my-2 text-sm text-zinc-500 dark:text-zinc-400 writing-mode-vertical-rl text-orientation-upright">
+    または
+  </span>
+  <div class="h-px px-4 sm:px-16 bg-zinc-200 dark:bg-zinc-600"></div>
+</div>
+
+<div class="flex flex-col gap-4 px-4 sm:px-16">
+  <%= link_to "/auth/google_oauth2", class: "inline-flex items-center justify-center gap-2 border border-zinc-200 rounded-md text-sm cursor-pointer font-medium hover:bg-zinc-200 dark:hover:bg-zinc-800 h-10 px-4 py-2" do %>
+    <%= icon "google" %>
+    Google で続行
+  <% end %>
+</div>
+
