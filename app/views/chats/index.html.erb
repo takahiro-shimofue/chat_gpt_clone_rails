@@ -28,11 +28,10 @@
                         <div class="w-full text-sm">
                           <div class="flex w-full min-w-0 flex-col gap-1">
                             <div class="flex flex-col gap-2">
-                              <%= turbo_frame_tag "chat_links" do %>
+                                <%= turbo_frame_tag "chat_links" %>
                                 <% Current.session.user.chats.order(created_at: :desc).each do |chat| %>
                                   <%= render partial: "chats/link", locals: { chat: chat } %>
                                 <% end %>
-                              <% end %>
                             </div>
                           </div>
                         </div>

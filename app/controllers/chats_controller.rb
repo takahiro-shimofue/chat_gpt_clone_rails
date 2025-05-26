@@ -42,6 +42,19 @@ class ChatsController < ApplicationController
     end
   end
 
+  def delete_modal
+    @chat = Current.session.user.chats.find_by!(uuid: params[:uuid])
+    respond_to do |format|
+      format.turbo_stream { render "chats/delete_modal" }
+    end
+  end
+
+  def destroy
+    @chat = Current.session.user.chats.find_by!(uuid: params[:uuid])
+    @chat.destroy
+    redirect_to chats_path, notice: "チャットを削除しました"
+  end
+
   private
 
   def set_streaming_headers
