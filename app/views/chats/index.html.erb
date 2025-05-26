@@ -1,11 +1,21 @@
-<div class="group/sidebar-wrapper flex min-h-svh w-full">
+<div data-controller="sidebar" class="group/sidebar-wrapper flex min-h-svh w-full">
 
-  <div class="z-20 dark:bg-black bg-white shrink-0 w-64 h-screen overflow-y-auto">
+  <div data-sidebar-target="sidebar" class="z-20 dark:bg-black bg-white shrink-0 w-64 h-screen overflow-y-auto">
     <div class="h-full w-64">
       <div class="flex h-full min-h-0 flex-col">
         <div class="relative h-full w-full flex-1 items-start border-r border-zinc-700">
           <h2 class="sr-only">チャット履歴</h2>
           <nav class="flex h-full w-full flex-col pl-3">
+            <div class="flex justify-between h-16 items-center pr-3">
+              <button
+                class="hover:bg-zinc-200 dark:hover:bg-zinc-700 h-10 rounded-lg px-2"
+                aria-label="サイドバーを閉じる"
+                data-action="click->sidebar#toggle"
+                data-sidebar-target="toggleButton"
+              >
+                <%= image_tag "sidebar.svg" %>
+              </button>
+            </div>
             <div class="flex-col flex-1 transition-opacity duration-500 relative pr-3 overflow-y-auto">
               <div id="sidebar" class="group/sidebar">
                 <div class="flex flex-col gap-2 text-sm">
