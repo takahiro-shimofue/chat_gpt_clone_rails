@@ -9,13 +9,13 @@
       <button
         data-action="click->dropdown#toggle click@window->dropdown#hide"
       >
-        <%= image_tag "ellipsis.svg" %>
+        <%= icon "ellipsis" %>
       </button>
     </div>
     <div data-dropdown-target="menu" class="hidden absolute z-30 mt-2 w-32 right-0 rounded-md bg-white dark:bg-zinc-800 shadow-lg ring-1 ring-black/5 focus:outline-hidden">
       <div class="py-1" role="none" data-action="click->dropdown#toggle">
         <%= link_to delete_modal_chat_path(uuid: chat.uuid), data: { turbo_frame: :modal, turbo_stream: true }, class: "gap-4 group/item flex justify-between items-center p-2" do %>
-          <%= image_tag "trash.svg" %>
+          <%= icon "trash" %>
           <div class="flex flex-col gap-1 items-start text-red-400">
             <div>削除</div>
           </div>

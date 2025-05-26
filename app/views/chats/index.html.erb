@@ -13,10 +13,10 @@
                 data-action="click->sidebar#toggle"
                 data-sidebar-target="toggleButton"
               >
-                <%= image_tag "sidebar.svg" %>
+                <%= icon "sidebar" %>
               </button>
               <%= link_to :root, class: "hover:bg-zinc-200 inline-flex items-center justify-center dark:hover:bg-zinc-700 h-10 rounded-lg px-2 focus:outline-none" do %>
-                <%= image_tag "edit.svg" %>
+                <%= icon "edit" %>
               <% end %>
             </div>
             <div class="flex-col flex-1 transition-opacity duration-500 relative pr-3 overflow-y-auto">
@@ -89,7 +89,7 @@
 
           <div class="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
             <button type="submit" class="rounded-full p-1.5 h-fit border dark:border-zinc-600">
-              <%= image_tag "arrowup.svg" %>
+              <%= icon "arrowup" %>
             </button>
           </div>
         </div>
