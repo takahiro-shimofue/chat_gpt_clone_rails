@@ -16,13 +16,14 @@ class ChatsController < ApplicationController
   def create
     set_streaming_headers
     sse = SSE.new(response.stream, event: "message")
-    client = OpenAI::Client.new(
-      access_token: Rails.application.credentials.dig(:gemini, :api_key),
-      uri_base: "https://generativelanguage.googleapis.com/v1beta/openai/"
-    )
+    chat_model = Chat::MODELS.index_by { |m| m[:id] }[params[:chat_model]]
+    unless chat_model
+      raise "Invalid model specified"
+    end
+    client = OpenAI::Client.new(chat_model.slice(:access_token, :uri_base))
 
     begin
-      content = stream_chat_response(client, sse)
+      content = stream_chat_response(client, sse, chat_model)
       chat = Chat.find_or_initialize_by(uuid: params[:uuid]) do |chat|
         chat.user = Current.session.user
         chat.title = generate_title(client)
@@ -48,11 +49,12 @@ class ChatsController < ApplicationController
     response.headers["Last-Modified"] = Time.now.httpdate
   end
 
-  def stream_chat_response(client, sse)
+  def stream_chat_response(client, sse, chat_model)
     full_content = ""
+
     client.chat(
       parameters: {
-        model: "gemini-2.0-flash",
+        model: chat_model[:id],
         messages: [ { role: "user", content: params[:prompt] } ],
         stream: proc do |chunk|
           content = chunk.dig("choices", 0, "delta", "content")
