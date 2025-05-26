@@ -1,6 +1,9 @@
 import {Controller} from "@hotwired/stimulus"
 import { marked } from "marked";
 import DOMPurify from "dompurify";
+
+const DEFAULT_CHAT_MODEL = "gemini-2.0-flash"
+
 // Connects to data-controller="chat"
 export default class extends Controller {
   static targets = ["prompt", "conversation", "scroll", "greeting"]
@@ -32,19 +35,21 @@ export default class extends Controller {
   async #streamAssistantResponse() {
     const prompt = this.promptTarget.value;
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-    let body = { prompt }
+    const chatModel = document.cookie.split('; ')
+                        .find(row => row.startsWith('chat_model='))
+                        ?.split('=')[1] || DEFAULT_CHAT_MODEL;
+    let body = { prompt, chat_model: chatModel };
     // root urlのときは、/chats/uuidにリダイレクトする
     let uuid;
     let newRecord = false;
     if (window.location.pathname === "/") {
       uuid = crypto.randomUUID();
       window.history.replaceState({}, '', `/chats/${uuid}`);
-      body = { prompt, uuid }
       newRecord = true;
+      body = { ...body, uuid };
     } else {
       uuid = window.location.pathname.split('/').pop();
-      body = { prompt, uuid }
+      body = { ...body, uuid };
     }
 
     const response = await fetch('/chats', {
