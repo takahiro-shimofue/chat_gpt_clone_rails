@@ -20,6 +20,9 @@ servers:
 proxy:
   ssl: true
   host: chatgpt.de-f.net
+  buffering:
+    requests: false
+    responses: false
 
 # Credentials for your image host.
 registry:
