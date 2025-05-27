@@ -60,6 +60,8 @@ class ChatsController < ApplicationController
   def set_streaming_headers
     response.headers["Content-Type"]  = "text/event-stream"
     response.headers["Last-Modified"] = Time.now.httpdate
+    response.headers.delete("Content-Encoding")
+    response.headers.delete("Content-Length")
   end
 
   def stream_chat_response(client, sse, chat_model)
