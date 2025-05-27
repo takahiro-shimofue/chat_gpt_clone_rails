@@ -21,8 +21,11 @@ proxy:
   ssl: true
   host: chatgpt.de-f.net
   buffering:
-    requests: false
-    responses: false
+    requests: true
+    responses: true
+    max_request_body: 40_000_000
+    max_response_body: 0
+    memory: 2_000_000
 
 # Credentials for your image host.
 registry:
