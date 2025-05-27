@@ -45,8 +45,6 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-RUN if [ -z "$RAILS_MASTER_KEY" ]; then echo "Error: RAILS_MASTER_KEY is not set" >&2; exit 1; else echo "RAILS_MASTER_KEY=$RAILS_MASTER_KEY"; fi
-
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN --mount=type=secret,id=RAILS_MASTER_KEY,env=RAILS_MASTER_KEY ./bin/rails assets:precompile
 
