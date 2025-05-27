@@ -23,8 +23,6 @@ proxy:
   buffering:
     requests: false
     responses: false
-  protocols:
-    - http/1.1
 
 # Credentials for your image host.
 registry:
