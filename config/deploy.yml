@@ -7,7 +7,9 @@ image: ihatov08/chat_gpt_clone_rails
 # Deploy to these servers.
 servers:
   web:
-    - 160.251.179.69
+    hosts:
+      - 160.251.179.69
+    cmd: bin/rails server
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -21,11 +23,8 @@ proxy:
   ssl: true
   host: chatgpt.de-f.net
   buffering:
-    requests: true
-    responses: true
-    max_request_body: 40_000_000
-    max_response_body: 0
-    memory: 2_000_000
+    requests: false
+    responses: false
 
 # Credentials for your image host.
 registry:
